@@ -2,7 +2,7 @@ import Product from "../models/product.js";
 
 const addProduct = async (req, res) => {
   try {
-    const { name,category,categoryId,stock,price,supplierId } = req.body;
+    const { name,category,categoryId,stock,description,price,supplierId } = req.body;
 
     if (!name || name.trim() === '') {
       return res.status(400).json({ message: 'Supplier name is required' });
@@ -16,7 +16,7 @@ const addProduct = async (req, res) => {
     }
 
     // Create new category
-    const newProduct = await Product.create({ name: name,category,categoryId,stock,price,supplierId });
+    const newProduct = await Product.create({ name: name,category,categoryId,stock,description,price,supplierId });
     await newProduct.save();
     return res.status(201).json({ success:true,message: 'Product added successfully', newProduct });
 
@@ -71,8 +71,8 @@ const deleteProduct = async (req, res) => {
   res.status(200).json({ status: true, message: "Product deleted successfully" });
 };
 
-const getProductListing = async()=>{
-  const { searchTerm,categoryId,page,pageSize,sortBy,sortOrder}= req.query
+const getProductListing = async(req,res)=>{
+  let { searchTerm,categoryId,page,pageSize,sortBy,sortOrder}= req.query
 if(!sortBy){
   sortBy="price"
 }
@@ -83,7 +83,7 @@ let queryFilter={};
 if(searchTerm){
   queryFilter.$or= [
     {
-      name : {$regex: '.*'+searchTerm+'*.'}
+      name : {$regex: '.*'+searchTerm+'.*'}
     },
     {
       description: {$regex: '.*'+searchTerm+'*.'}
@@ -96,9 +96,9 @@ if(categoryId){
 }
 const products= await Product.find(queryFilter)
 .sort({
-  [sortBy]: sortOrder
+  [sortBy]: +sortOrder
 })
-.skip((page-1)*pageSize).limit(pageSize);
+.skip((+page-1)* +pageSize).limit(pageSize);
 return  res.send(products.map((x) => x.toObject()))
 }
 

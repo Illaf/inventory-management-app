@@ -10,7 +10,11 @@ const userSchema = new mongoose.Schema({
     enum: ['admin', 'user'],
     default: 'user'
   },
-  isAdmin: { type: Boolean, default: false },
+  admin: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    default: null
+  },
   products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product', default: [] }]
 });
 

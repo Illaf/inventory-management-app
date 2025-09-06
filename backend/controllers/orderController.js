@@ -1,42 +1,50 @@
 import Order from '../models/order.js';
-import Product from '../models/product.js';
+import Cart from '../models/cart.js';
 
-const addOrder = async (req, res) => {
-  try {
-    const { userId, products } = req.body; // products = [{ product, quantity }]
-    if (!products || products.length === 0) {
-      return res.status(400).json({ message: 'No products in order' });
-    }
+export const placeOrder = async (req, res) => {
+  const userId = req.user._id;
+  const cart = await Cart.findOne({ user: userId }).populate('items.product');
 
-    let totalPrice = 0;
+  if (!cart || cart.items.length === 0) {
+    return res.status(400).json({ message: 'Cart is empty' });
+  }
 
-    // Calculate total price and update stock
-    for (const item of products) {
-      const prod = await Product.findById(item.product);
-      if (!prod) {
-        return res.status(404).json({ message: `Product not found: ${item.product}` });
-      }
+  const orderItems = cart.items.map((item) => ({
+    product: item.product._id,
+    name: item.product.name,
+    quantity: item.quantity,
+    price: item.product.price
+  }));
 
-      if (prod.stock < item.quantity) {
-        return res.status(400).json({ message: `Insufficient stock for ${prod.name}` });
-      }
+  const total = orderItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
 
-      prod.stock -= item.quantity;
-      await prod.save();
+  const order = new Order({
+    user: userId,
+    items: orderItems,
+    total
+  });
 
-      totalPrice += prod.price * item.quantity;
-    }
+  await order.save();
+  await Cart.findOneAndDelete({ user: userId }); // clear cart
 
-    const newOrder = await Order.create({
-      user: userId,
-      products,
-      totalPrice
-    });
+  res.status(201).json({ message: 'Order placed successfully', order });
+};
+// API: GET /api/orders/user
+export const getMyOrders = async (req, res) => {
+  const orders = await Order.find({ user: req.user._id }).sort({ placedAt: -1 });
+  res.json(orders);
+};
 
-    res.status(201).json({ success: true, message: 'Order placed successfully', order: newOrder });
-  } catch (err) {
-    res.status(500).json({ success: false, message: 'Server error', error: err.message });
+// Optional: notify and mark as read
+export const markOrderNotified = async (req, res) => {
+  const order = await Order.findOne({ _id: req.params.orderId, user: req.user._id });
+
+  if (order && order.approved && !order.notified) {
+    order.notified = true;
+    await order.save();
+    res.json({ message: 'Order marked as notified' });
+  } else {
+    res.status(400).json({ message: 'No new notification' });
   }
 };
 
-export { addOrder };
