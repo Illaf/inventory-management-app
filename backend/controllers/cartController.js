@@ -61,6 +61,7 @@ import Cart from "../models/cart.js";
   
   // DELETE /api/cart/clear
  const clearCart = async (req, res) => {
+  console.log("Clearing cart for user:", req.user?._id);
     await Cart.findOneAndDelete({ user: req.user._id });
     res.status(200).json({ message: 'Cart cleared' });
   };

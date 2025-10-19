@@ -71,35 +71,45 @@ const deleteProduct = async (req, res) => {
   res.status(200).json({ status: true, message: "Product deleted successfully" });
 };
 
-const getProductListing = async(req,res)=>{
-  let { searchTerm,categoryId,page,pageSize,sortBy,sortOrder}= req.query
-if(!sortBy){
-  sortBy="price"
-}
-if(!sortOrder){
-  sortOrder=-1;
-}
-let queryFilter={};
-if(searchTerm){
-  queryFilter.$or= [
-    {
-      name : {$regex: '.*'+searchTerm+'.*'}
-    },
-    {
-      description: {$regex: '.*'+searchTerm+'*.'}
+const getProductListing = async (req, res) => {
+  try {
+    let { searchTerm, categoryId, page, pageSize, sortBy, sortOrder } = req.query;
+
+    sortBy = sortBy || 'price';
+    sortOrder = sortOrder !== undefined ? Number(sortOrder) : -1;
+    page = page ? Math.max(1, parseInt(page, 10)) : 1;
+    pageSize = pageSize ? Math.max(1, parseInt(pageSize, 10)) : 20;
+
+    const queryFilter = {};
+
+    if (searchTerm) {
+      // ✅ Escape regex special characters
+      const escaped = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp(escaped, 'i'); // case-insensitive regex
+
+      queryFilter.$or = [
+        { name: { $regex: re } },
+        { description: { $regex: re } }
+      ];
     }
-  ]
-  
-}
-if(categoryId){
-  queryFilter.categoryId = categoryId
-}
-const products= await Product.find(queryFilter)
-.sort({
-  [sortBy]: +sortOrder
-})
-.skip((+page-1)* +pageSize).limit(pageSize);
-return  res.send(products.map((x) => x.toObject()))
-}
+
+    if (categoryId) {
+      queryFilter.categoryId = categoryId;
+    }
+
+    const skip = (page - 1) * pageSize;
+
+    const products = await Product.find(queryFilter)
+      .sort({ [sortBy]: sortOrder })
+      .skip(skip)
+      .limit(pageSize);
+
+    return res.status(200).json(products.map((x) => x.toObject()));
+  } catch (error) {
+    console.error('Error in getProductListing:', error);
+    return res.status(500).json({ success: false, message: 'Server error', error });
+  }
+};
+
 
 export {addProduct, getProduct,updateProduct,deleteProduct,getProductById,getProductListing}
