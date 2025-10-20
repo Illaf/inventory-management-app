@@ -1,19 +1,17 @@
 {
-    "projects": [
-      {
-        "src": "frontend/webapp/dist/**",
-        "use": "@vercel/static"
-      }
-    ],
-    "rewrites": [
-      { "source": "/(.*)", "destination": "/index.html" }
-    ],
+    "version": 2,
     "builds": [
       {
         "src": "frontend/webapp/package.json",
-        "use": "@vercel/static-build",
-        "config": { "distDir": "frontend/webapp/dist/webapp" }
+        "use": "@vercel/angular"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "frontend/webapp/$1"
       }
     ]
   }
+  
   
