@@ -1,0 +1,39 @@
+<header class="bg-white shadow-md px-6 py-4 flex items-center justify-between">
+    <!-- Logo / Brand -->
+    <div class="text-xl font-bold text-blue-600 tracking-wide">
+      InventoryStore
+    </div>
+  
+    <!-- Search Bar -->
+    <div class="w-full max-w-md mx-6">
+      <input
+        type="text"
+        placeholder="Search for items..."
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="onSearch()"
+        
+        class="w-full px-4 py-2 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+  
+    <!-- Cart & Profile -->
+    <div class="flex items-center gap-6" [routerLink]="'/orders'">
+      <!-- Cart Icon -->
+      <button class="relative group">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 group-hover:text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 7M7 13l-2 9h14l-2-9M10 21a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"/>
+        </svg>
+        <span class="absolute -top-2 -right-2 text-xs bg-red-600 text-white px-1.5 rounded-full" >
+          cartCount
+        </span>
+      </button>
+  <div *ngIf="isAdmin" [routerLink] ="'/admin/dashboard'">Dashboard</div>
+      <!-- Profile -->
+      <div class="flex items-center space-x-2">
+        <img src="/assets/user-avatar.png" alt="User" class="h-8 w-8 rounded-full border" />
+        <!-- <span class="text-gray-700 font-medium">{{authService.getUsername()}}</span> -->
+        <span class="text-gray-700 font-medium cursor-pointer" (click)="logout()">Logout</span>
+      </div>
+    </div>
+  </header>
+  

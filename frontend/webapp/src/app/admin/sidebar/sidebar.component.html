@@ -1,0 +1,66 @@
+<aside class="hidden md:flex md:flex-col w-64 bg-gradient-to-b h-screen from-blue-50 to-white shadow-xl rounded-r-2xl p-6 space-y-8 border-r border-blue-100">
+    <!-- Header -->
+    <div class="flex items-center gap-2 pb-2 border-b border-blue-100">
+      <div class="p-2 bg-blue-100 rounded-lg">
+        <span class="text-2xl">⚙️</span>
+      </div>
+      <h2 class="text-2xl font-extrabold text-blue-700 tracking-tight">Admin Panel</h2>
+    </div>
+  
+    <!-- Navigation -->
+    <nav class="flex flex-col gap-2 text-gray-700">
+      <a
+        routerLink="/admin/products"
+        routerLinkActive="bg-blue-100 text-blue-700 font-semibold border-l-4 border-blue-600"
+        class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-all duration-200"
+      >
+        <span class="text-lg">👥</span>
+        <span>My Users</span>
+      </a>
+      <a
+      routerLink="/admin/dashboard"
+      routerLinkActive="bg-blue-100 text-blue-700 font-semibold border-l-4 border-blue-600"
+      class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-all duration-200"
+    >
+      <span class="text-lg">📊</span>
+      <span>My Dashboard</span>
+    </a>
+      <a
+        routerLink="/admin/categories"
+        routerLinkActive="bg-blue-100 text-blue-700 font-semibold border-l-4 border-blue-600"
+        class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-all duration-200"
+      >
+        <span class="text-lg">📂</span>
+        <span>Manage Categories</span>
+      </a>
+     
+
+      <a
+        routerLink="/admin/products"
+        routerLinkActive="bg-blue-100 text-blue-700 font-semibold border-l-4 border-blue-600"
+        class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-all duration-200"
+      >
+        <span class="text-lg">📦</span>
+        <span>Manage Products</span>
+      </a>
+  
+      <!-- <a
+        routerLink="/admin/orders"
+        routerLinkActive="bg-blue-100 text-blue-700 font-semibold border-l-4 border-blue-600"
+        class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-all duration-200"
+      >
+        <span class="text-lg">🧾</span>
+        <span>Manage Orders</span>
+      </a> -->
+    </nav>
+  
+    <!-- Footer (optional) -->
+    <div class="mt-auto pt-4 border-t border-blue-100">
+      <button
+        class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white font-medium rounded-lg shadow hover:bg-blue-700 transition"
+      >
+        🚪 Logout
+      </button>
+    </div>
+  </aside>
+  

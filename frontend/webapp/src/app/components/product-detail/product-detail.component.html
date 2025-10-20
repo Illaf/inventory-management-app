@@ -1,0 +1,31 @@
+
+<!-- Product Detail Page --> <div *ngIf="product" class="max-w-5xl mx-auto p-6 mt-8"> <!-- Main Product Card --> <div class="bg-white rounded-2xl shadow-xl p-6 grid grid-cols-1 md:grid-cols-2 gap-8 items-center"> <!-- Image --> <div class="flex justify-center"> <img [src]="product.imageUrl || 'assets/placeholder.png'" alt="{{ product.name }}" class="w-full h-80 object-contain bg-gray-50 rounded-xl shadow-sm" /> </div>
+<!-- Details -->
+<div class="space-y-4">
+  <h1 class="text-3xl font-extrabold text-gray-900">{{ product.name }}</h1>
+  <p class="text-gray-600">{{ product.description }}</p>
+
+  <div class="space-y-2">
+    <p class="text-gray-700">
+      <strong>Category:</strong>
+      {{ product.categoryName || product.categoryId }}
+    </p>
+    <p class="text-gray-700">
+      <strong>Stock:</strong>
+      <!-- <span [ngClass]="product.stock > 0 ? 'text-green-600' : 'text-red-600'">
+        {{ product.stock > 0 ? 'In Stock' : 'Out of Stock' }}
+      </span> -->
+    </p>
+  </div>
+
+  <p class="text-2xl font-bold text-green-600">
+    ₹{{ product.price }}
+  </p>
+
+  <button
+    class="bg-blue-500 text-white px-6 py-3 rounded-xl font-semibold shadow-md hover:bg-blue-600 hover:shadow-lg transition-all duration-200 flex items-center gap-2"
+    
+  >
+    🛒 Add to Cart
+  </button>
+</div>

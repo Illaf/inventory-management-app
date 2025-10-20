@@ -1,0 +1,57 @@
+<div>
+   
+    <div>
+        <div class="max-w-xl mx-auto mt-10 bg-white p-8 rounded-xl shadow-md">
+     
+            <h2 *ngIf="isEditing; else addTitle">Edit Category</h2>
+            <ng-template #addTitle>Add new Category</ng-template>
+            <form class="space-y-5" [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+              <!-- Name -->
+              <div>
+                <label for="name" class="block mb-1 text-gray-700 font-medium">Category Name</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  formControlName="name" 
+                  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter category name"
+                  required
+                />
+              </div>
+          <mat-error *ngIf="categoryForm.get('name')?.hasError('required') && categoryForm.get('name')?.touched ">
+            Name field is required
+          </mat-error>
+              <!-- Description -->
+              <div>
+                <label for="description" class="block mb-1 text-gray-700 font-medium">Description</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  formControlName="description"
+                  rows="4"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter category description"
+                  required
+                ></textarea>
+              </div>
+          
+              <!-- Submit Button -->
+              <div>
+                <ng-container *ngIf="isEditing; else addBtn">
+                  <button mat-raised-button color="accent"  type="button"
+                  class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors" (click)="update()">Update Category</button>
+                </ng-container>
+                
+                <ng-template #addBtn>
+                  <button mat-raised-button color="primary"  type="submit" 
+                  class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">Add Category</button>
+                </ng-template>
+                
+              </div>
+            </form>
+          </div>
+          
+    </div>
+
+</div>

@@ -1,0 +1,8 @@
+<app-header *ngIf="isLoggedIn"></app-header>
+
+<main class="min-h-screen">
+  <router-outlet></router-outlet>
+</main>
+
+<app-footer *ngIf="isLoggedIn"></app-footer>
+
