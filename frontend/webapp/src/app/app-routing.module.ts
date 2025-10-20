@@ -75,12 +75,7 @@ const routes: Routes = [
     canActivate:[AuthGuard]
   },
   { path: 'product/:id', component: ProductDetailComponent } ,
-  // {
-  //   path:"productlist",
-  //   component: ProductlistComponent,
-  //   canActivate:[AuthGuard],
-    
-  // },
+
   {
     path:"productlist",
     component: ProductlistComponent,
@@ -88,8 +83,10 @@ const routes: Routes = [
     
   },
   {
-    path:"auth/register",
-    component: RegisterComponent
+    path: 'auth',
+    children: [
+      { path: 'register', component: RegisterComponent }
+    ]
   },
   {
     path:"auth/login",

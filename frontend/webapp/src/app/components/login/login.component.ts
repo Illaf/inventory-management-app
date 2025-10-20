@@ -4,13 +4,13 @@ import { AuthService } from 'src/app/service/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, Validators,ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 @Component({
   selector: 'app-login',
   standalone:true,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  imports:[FormsModule,MatInputModule,ReactiveFormsModule,CommonModule]
+  imports:[FormsModule,MatInputModule,ReactiveFormsModule,CommonModule,RouterModule]
 })
 export class LoginComponent implements OnInit {
   errorMessage: String | undefined
