@@ -19,14 +19,13 @@ import { LayoutComponent } from './admin/layout/layout.component';
 import { HeroComponent } from './hero/hero.component';
 
 const routes: Routes = [
-  { path: '', component: HeroComponent },
+  { path: '', redirectTo: 'welcome', pathMatch: 'full' },
+  { path: 'welcome', component: HeroComponent },
   {
     path:"",
     component: HomeComponent,
     canActivate:[AuthGuard]
   },
-  
- 
   {
     path: '',
     component: LayoutComponent, // layout that holds sidebar + router-outlet
@@ -105,7 +104,8 @@ const routes: Routes = [
     path:"orders",
     component: OrderComponent,
      canActivate:[AuthGuard]
-  }
+  },
+  { path: '**', redirectTo: 'welcome' }
 ];
 
 @NgModule({
