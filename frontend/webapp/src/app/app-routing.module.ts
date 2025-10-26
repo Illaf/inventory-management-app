@@ -16,13 +16,17 @@ import { CartComponent } from './components/cart/cart.component';
 import { ProductlistComponent } from './components/productlist/productlist.component';
 import { OrderComponent } from './components/order/order.component';
 import { LayoutComponent } from './admin/layout/layout.component';
+import { HeroComponent } from './hero/hero.component';
 
 const routes: Routes = [
+  { path: '', component: HeroComponent },
   {
     path:"",
     component: HomeComponent,
     canActivate:[AuthGuard]
   },
+  
+ 
   {
     path: '',
     component: LayoutComponent, // layout that holds sidebar + router-outlet

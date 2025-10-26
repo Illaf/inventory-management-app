@@ -1,8 +1,10 @@
 <app-header *ngIf="isLoggedIn"></app-header>
 
+<!-- Show Hero only when logged out -->
+<app-hero *ngIf="router.url === '/'"></app-hero>
+
 <main class="min-h-screen">
   <router-outlet></router-outlet>
 </main>
 
 <app-footer *ngIf="isLoggedIn"></app-footer>
-

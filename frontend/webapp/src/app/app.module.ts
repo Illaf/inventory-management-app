@@ -26,6 +26,7 @@ import { OrderComponent } from './components/order/order.component';
 import { AdminOrdersComponent } from './components/admin-orders/admin-orders.component';
 import { LayoutComponent } from './admin/layout/layout.component';
 import { SidebarComponent } from './admin/sidebar/sidebar.component';
+import { HeroComponent } from './hero/hero.component';
 
 @NgModule({
   providers: [
@@ -50,6 +51,7 @@ import { SidebarComponent } from './admin/sidebar/sidebar.component';
          AdminOrdersComponent,
          LayoutComponent,
          SidebarComponent,
+         HeroComponent,
          
          
         
