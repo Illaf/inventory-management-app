@@ -63,7 +63,7 @@ export class ProductlistComponent implements OnInit {
       })
       .subscribe({
         next: (res: any) => {
-          console.log('Filtered products:', res);
+          // console.log('Filtered products:', res);
           this.products = res || [];
           this.loading = false;
         },

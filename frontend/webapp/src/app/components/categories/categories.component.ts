@@ -23,7 +23,7 @@ export class CategoriesComponent implements AfterViewInit {
  }
   ngOnInit(){
     this.categoryService.getCategories().subscribe((result:any) =>{
-      console.log(result)
+      // console.log(result)
       this.dataSource.data=result.categories
     })
   }
@@ -35,7 +35,7 @@ export class CategoriesComponent implements AfterViewInit {
    }
    delete(id:string){
 this.categoryService.deleteCategory(id).subscribe((result:any)=>{
-  console.log(result);
+  // console.log(result);
 })
    }
   }

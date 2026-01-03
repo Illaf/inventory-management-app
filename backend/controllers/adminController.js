@@ -1,6 +1,7 @@
 import User from "../models/user.js"
 import Order from "../models/order.js"
-import { io,onlineUsers } from "../server.js";
+// import { io,onlineUsers } from "../server.js";
+import { getIO, getOnlineUsers } from "../utils/socket.js";
 export const getUserOrdersUnderAdmin = async (req, res) => {
     const adminId = req.user._id;
   
@@ -21,29 +22,44 @@ export const getUserOrdersUnderAdmin = async (req, res) => {
       res.status(500).json(error)
     }
 }
-  export const changeStatusOrder = async (req, res) => {
-    try {
-      const { status } = req.body; 
-  
-      if (!['approved', 'rejected'].includes(status)) {
-        return res.status(400).json({ message: 'Invalid status' });
-      }
-  
-      const order = await Order.findById(req.params.id);
-      if (!order) return res.status(404).json({ message: 'Order not found' });
-  
-      order.status = status;
-      await order.save();
-      const userSocket = onlineUsers.get(order.user._id)
-      if(userSocket){
-        io.to(userSocket.socketId).emit("order-status-updated",{
-          orderId: order._id,
-          status: order.status
-        })
-      }
-      res.status(200).json({ success: true, message: `Order ${status}`, order });
-    } catch (error) {
-      res.status(500).json({ success: false, message: 'Server error', error });
+export const changeStatusOrder = async (req, res) => {
+  try {
+    const { status } = req.body;
+
+    if (!['approved', 'rejected'].includes(status)) {
+      return res.status(400).json({ message: 'Invalid status' });
     }
+
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    order.status = status;
+    await order.save();
+
+    const io = getIO();
+    const onlineUsers = getOnlineUsers();
+    const userId =
+    typeof order.user === 'object'
+      ? order.user._id.toString()
+      : order.user.toString();
+    const userSocket = onlineUsers.get(userId);
+
+    if (userSocket) {
+      io.to(userSocket.socketId).emit("order-status-updated", {
+        orderId: order._id,
+        status: order.status
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Order ${status}`,
+      order
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error' });
   }
-  
+};

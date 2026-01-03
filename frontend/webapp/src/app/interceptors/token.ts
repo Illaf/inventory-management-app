@@ -6,30 +6,29 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-
   constructor(private router: Router) {}
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.headers.has('x-skip-interceptor')) {
-      const newReq = req.clone({ headers: req.headers.delete('x-skip-interceptor') });
-      return next.handle(newReq);
-    }
+
+  intercept(req: HttpRequest<any>, next: HttpHandler) {
 
     const token = localStorage.getItem('token');
+
     if (token) {
       req = req.clone({
-        setHeaders: { Authorization: `Bearer ${token}` }
+        setHeaders: {
+          Authorization: `Bearer ${token}`
+        }
       });
     }
 
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401 && error.error?.message === 'jwt expired') {
+        if (error.status === 401) {
           localStorage.removeItem('token');
-          alert('Token expired. Please login again');
-          this.router.navigate(['/login']);
+          this.router.navigate(['/auth/login']);
         }
         return throwError(() => error);
       })
     );
   }
 }
+

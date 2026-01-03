@@ -45,13 +45,13 @@ constructor(private fb: FormBuilder) {
 
 onSubmit(){
   console.log("Submit clicked!");
-  console.log(this.categoryForm.status)
+  // console.log(this.categoryForm.status)
   if(this.categoryForm.valid){
     
       this.categoryService.addCategory(this.categoryForm.value).subscribe({
         next: (res) => {
           alert("Category added")
-          console.log('Category added:', res);
+          // console.log('Category added:', res);
           // navigate or show success message
         },
         error: (err) => {

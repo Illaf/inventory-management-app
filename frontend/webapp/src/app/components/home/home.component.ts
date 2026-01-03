@@ -25,28 +25,40 @@ user : any;
   constructor(private socketService: SocketService) { }
 
   ngOnInit(): void {
-   
+
+    // ✅ 1. Load user FIRST
+    this.user = JSON.parse(localStorage.getItem('user') || 'null');
+  
+    if (this.user) {
+      // 🔌 2. Connect socket
+      this.socketService.connect();
+  
+      // 🧾 3. Register user
+      this.socketService.register(this.user._id, 'user');
+  
+      // 🔔 4. Listen for status updates
+      this.socketService.onOrderStatusUpdate().subscribe(data => {
+        alert(`Your order ${data.orderId} is now ${data.status}`);
+      });
+    }
+  
+    // 📦 Load categories
     this.categoryService.getCategories().subscribe({
-      
       next: (res: any) => {
-        this.categories = res.categories; 
+        this.categories = res.categories;
       },
       error: (err) => {
         console.error('Failed to load categories', err);
       }
-  })
-this.socketService.register(this.user._id,"user")
-this.socketService.onOrderStatusUpdate().subscribe(data => {
-  alert(`Your order ${data.orderId} is now ${data.status}`);
-});
-
+    });
   }
+  
 searchCategory(categoryId:string){
   console.log(categoryId)
   this.router.navigate(['/productlist', categoryId]);
 }
 selectCategory(categoryId: string) {
   this.selectedCategoryId = categoryId;
-  console.log(this.selectedCategoryId)
+  // console.log(this.selectedCategoryId)
 }
 }

@@ -34,7 +34,7 @@ export class ProductDetailComponent implements OnInit {
     if (id) {
       this.productService.getProductById(id).subscribe({
         next: (res) => {
-          console.log('API response:', res);
+          // console.log('API response:', res);
           this.product = res.product; // ✅ store the actual product object
         },
         error: (err) => console.error('Error fetching product:', err)

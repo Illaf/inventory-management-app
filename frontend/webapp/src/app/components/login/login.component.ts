@@ -32,12 +32,12 @@ authService= inject(AuthService);
   
     const formData: any= this.loginForm.value;
    
-    console.log(formData);
+    // console.log(formData);
   
     this.authService.loginUser(formData).subscribe({
       next: (result: any) => {
         alert("User logged in");
-        console.log(result);
+        // console.log(result);
         localStorage.setItem('token', result.token);
         localStorage.setItem('user', JSON.stringify(result.user));
         if(result.user.admin == null){

@@ -19,7 +19,7 @@ export class CartService {
   fetchCart(): void {
     this.http.get<any>(this.cartUrl).subscribe({
       next: (res) => {
-        console.log("Fetched cart:", res);
+        // console.log("Fetched cart:", res);
         this._items.next(res.items || []); 
         return res.items
       },

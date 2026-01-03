@@ -50,9 +50,8 @@ export class AdmindashboardComponent implements OnInit {
   loadOrders() {
     this.http.get('http://localhost:8800/api/admin/orders').subscribe({
       next: (res: any) => {
-        console.log('Raw API response:', res);
+        // console.log('Raw API response:', res);
 
-        // ✅ The backend returns an array of orders directly, not inside `res.items`
         this.orders = Array.isArray(res) ? res : [];
 
         this.filteredOrders = [...this.orders];
@@ -67,12 +66,12 @@ export class AdmindashboardComponent implements OnInit {
     });
   }
 usersUnderAdmin(){
-  console.log("gets called usersUnderAdmin")
+  // console.log("gets called usersUnderAdmin")
   this.authService.getAllUsers().subscribe((users:any) => {
     const usersUnderAdmin = users.filter(
       (u: any) => u.role === 'user' && u.admin === this.adminId
     );
-    console.log("users under admin",usersUnderAdmin.length)
+    // console.log("users under admin",usersUnderAdmin.length)
     this.stats.totalUsers = usersUnderAdmin.length;
   })
 }
@@ -86,12 +85,11 @@ usersUnderAdmin(){
     this.stats.totalOrders = this.orders?.length;
     this.stats.pendingOrders = this.orders?.filter(o => o.status === 'pending').length;
     this.stats.totalRevenue = this.orders?.reduce((sum, o) => sum + (o.total || 0), 0);
-    console.log("gets called")
-    // ✅ Count unique users
+    // console.log("gets called")
     // const uniqueUsers = new Set(this.orders.map(o => o.user?._id));
     // this.stats.totalUsers = uniqueUsers.size;
 
-    console.log('Dashboard Stats:', this.stats);
+    // console.log('Dashboard Stats:', this.stats);
   }
 
   applyFilters(): void {
@@ -147,7 +145,7 @@ usersUnderAdmin(){
 
   openOrderModal(order: Order) {
     this.selectedOrder = order;
-    console.log('Selected order:', order);
+    // console.log('Selected order:', order);
   }
 
   closeOrderModal() {

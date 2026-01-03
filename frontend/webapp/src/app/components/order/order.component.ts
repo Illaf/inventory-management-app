@@ -64,7 +64,7 @@ loadCartItems(){
     });
   }
   removeItemFromCart(productId: string) {
-    console.log("clicked remove", productId);
+    // console.log("clicked remove", productId);
     this.cartService.removeFromCart(productId);
     this.cartService.fetchCart()
   }

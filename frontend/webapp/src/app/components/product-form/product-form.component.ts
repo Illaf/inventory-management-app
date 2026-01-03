@@ -94,12 +94,12 @@ export class ProductFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log('on submi =t triggered')
+    // console.log('on submit triggered')
     Object.keys(this.productForm.controls).forEach(controlName => {
       const control = this.productForm.get(controlName);
   
       if (control && control.invalid) {
-        console.log(`❌ Control "${controlName}" is invalid.`);
+        console.log(`Control "${controlName}" is invalid.`);
         console.log('Errors:', control.errors);
       }
     });

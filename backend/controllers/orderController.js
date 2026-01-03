@@ -1,9 +1,11 @@
 import Order from '../models/order.js';
 import Cart from '../models/cart.js';
-import {io,onlineUsers} from "../server.js"
+
 import sendMail from '../service/mailService.js';
+import { getIO, getOnlineUsers } from '../utils/socket.js';
 export const placeOrder = async (req, res) => {
   const userId = req.user._id;
+  const userName = req.user.name
   const cart = await Cart.findOne({ user: userId }).populate('items.product');
 
   if (!cart || cart.items.length === 0) {
@@ -26,7 +28,7 @@ export const placeOrder = async (req, res) => {
   });
 
   await order.save();
-  sendNotification(order)
+  sendNotification(order,userName)
   await Cart.findOneAndDelete({ user: userId }); // clear cart
 
   res.status(201).json({ message: 'Order placed successfully', order });
@@ -44,22 +46,24 @@ export const getMyOrders = async (req, res) => {
   }
 };
 
-export const sendNotification = (order)=> {
+export const sendNotification = (order, userName) => {
   try {
-    for(let [userId,data] of onlineUsers.entries()){
-      if(data.role === "admin"){
-        io.to(data.socketId).emit("new-order",{
+    const io = getIO();
+    const onlineUsers = getOnlineUsers();
+
+    for (const [, data] of onlineUsers.entries()) {
+      if (data.role === "admin") {
+        io.to(data.socketId).emit("new-order", {
           orderId: order._id,
-          total:order.total,
-          user:req.user.name
-        })
+          total: order.total,
+          user: userName,
+        });
       }
     }
   } catch (error) {
-    console.log("error in sendNotification:",error)
+    console.error("Socket notification error:", error);
   }
-
-}
+};
 
 // Optional: notify and mark as read
 export const markOrderNotified = async (req, res) => {

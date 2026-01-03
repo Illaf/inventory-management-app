@@ -28,7 +28,7 @@ route= inject(ActivatedRoute)
 products:Product[]= []
   ngOnInit(): void {
     this.productService.getProducts().subscribe((result:any) =>{
-      console.log(result.products);
+      // console.log(result.products);
       this.products= result.products;
     })
     this.cartService.fetchCart();
@@ -39,11 +39,11 @@ products:Product[]= []
   loadProducts() {
     try {
       if (this.categoryId) {
-        console.log("this.categoryId",this.categoryId)
+        // console.log("this.categoryId",this.categoryId)
         // fetch category-wise products
         this.productListService.getProductForList({categoryId:this.categoryId?? undefined}).subscribe((res:any) =>{
           this.products=res
-          console.log("res products:",res.products)
+          // console.log("res products:",res.products)
         })
       } else {
         // fetch all products

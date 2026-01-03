@@ -33,7 +33,7 @@ router=inject(Router);
     }
   }
   getUser(id:string){
-    console.log("id:",id)
+    // console.log("id:",id)
     return this.http.post('http://localhost:8800/api/auth/user',{id},{
       headers:{'x-skip-interceptor':'true'}
     })
