@@ -22,103 +22,69 @@ import { UsersComponent } from './admin/users/users.component';
 import { HowItWorksComponent } from './how-it-works/how-it-works.component';
 
 const routes: Routes = [
-  // { path: '', redirectTo: 'welcome', pathMatch: 'full' },
+
+  /* ---------- PUBLIC ---------- */
+  { path: '', redirectTo: 'welcome', pathMatch: 'full' },
   { path: 'welcome', component: HeroComponent },
   { path: 'how-it-works', component: HowItWorksComponent },
+
+  /* ---------- AUTH ---------- */
+  { path: 'auth/login', component: LoginComponent },
+  { path: 'auth/register', component: RegisterComponent },
+
+  /* ---------- USER ---------- */
   {
-    path:"",
+    path: 'home',
     component: HomeComponent,
-    canActivate:[AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
-    path:"profile",
-    component:ProfileComponent
+    path: 'profile',
+    component: ProfileComponent,
+    canActivate: [AuthGuard]
   },
   {
-    path: '',
-    component: LayoutComponent, // layout that holds sidebar + router-outlet
+    path: 'cart',
+    component: CartComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'orders',
+    component: OrderComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'product/:id',
+    component: ProductDetailComponent
+  },
+  {
+    path: 'productlist',
+    component: ProductlistComponent,
+    canActivate: [AuthGuard]
+  },
+
+  /* ---------- ADMIN (WITH LAYOUT) ---------- */
+  {
+    path: 'admin',
+    component: LayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       { path: 'dashboard', component: AdmindashboardComponent },
-      {
-        path:"admin/products",
-        component: ProductsComponent,
-         canActivate:[AuthGuard]
-      },
-      {
-        path:"admin/dashboard",
-        component: AdmindashboardComponent,
-        canActivate:[AuthGuard]
-      },
-      {
-        path:"admin/categories",
-        component: CategoriesComponent,
-        canActivate:[AuthGuard]
-      },
-      {
-        path:"admin/users",
-        component: UsersComponent,
-        // canActivate:[AuthGuard]
-      },
-     // { path: 'orders', component: ManageOrdersComponent },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-    ],
-  },
-
-  {
-    path:"admin/categories/add",
-    component: CategoryFormComponent,
-     canActivate:[AuthGuard]
-  },
-  {
-    path:"admin/categories/:id",
-    component: CategoryFormComponent,
-    canActivate:[AuthGuard]
-  },
-  {
-    path:"admin/products",
-    component: ProductsComponent,
-     canActivate:[AuthGuard]
-  },
-  {
-    path:"admin/products/add",
-    component: ProductFormComponent,
-     canActivate:[AuthGuard]
-  },
-  {
-    path:"admin/products/:id",
-    component: ProductFormComponent,
-    canActivate:[AuthGuard]
-  },
-  { path: 'product/:id', component: ProductDetailComponent } ,
-
-  {
-    path:"productlist",
-    component: ProductlistComponent,
-    canActivate:[AuthGuard],
-    
-  },
-  {
-    path: 'auth',
-    children: [
-      { path: 'register', component: RegisterComponent }
+      { path: 'products', component: ProductsComponent },
+      { path: 'products/add', component: ProductFormComponent },
+      { path: 'products/:id', component: ProductFormComponent },
+      { path: 'categories', component: CategoriesComponent },
+      { path: 'categories/add', component: CategoryFormComponent },
+      { path: 'categories/:id', component: CategoryFormComponent },
+      { path: 'users', component: UsersComponent },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
-  {
-    path:"auth/login",
-    component: LoginComponent
-  },
-  {
-    path:"cart",
-    component: CartComponent,
-    canActivate:[AuthGuard]
-  },
-  {
-    path:"orders",
-    component: OrderComponent,
-     canActivate:[AuthGuard]
-  },
+
+  /* ---------- FALLBACK ---------- */
   { path: '**', redirectTo: 'welcome' }
 ];
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
