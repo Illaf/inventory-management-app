@@ -19,10 +19,12 @@ import { LayoutComponent } from './admin/layout/layout.component';
 import { HeroComponent } from './hero/hero.component';
 import { ProfileComponent } from './profile/profile.component';
 import { UsersComponent } from './admin/users/users.component';
+import { HowItWorksComponent } from './how-it-works/how-it-works.component';
 
 const routes: Routes = [
   // { path: '', redirectTo: 'welcome', pathMatch: 'full' },
   { path: 'welcome', component: HeroComponent },
+  { path: 'how-it-works', component: HowItWorksComponent },
   {
     path:"",
     component: HomeComponent,

@@ -29,6 +29,7 @@ import { SidebarComponent } from './admin/sidebar/sidebar.component';
 import { HeroComponent } from './hero/hero.component';
 import { ProfileComponent } from './profile/profile.component';
 import { UsersComponent } from './admin/users/users.component';
+import { HowItWorksComponent } from './how-it-works/how-it-works.component';
 
 @NgModule({
   providers: [
@@ -54,6 +55,7 @@ import { UsersComponent } from './admin/users/users.component';
          SidebarComponent,
          HeroComponent,
          ProfileComponent,
+         HowItWorksComponent,
          
          
         
