@@ -1,0 +1,49 @@
+<div class="profile-container">
+    <h2>My Profile</h2>
+    
+    
+    <form [formGroup]="profileForm" (ngSubmit)="submit()">
+    
+    
+    <label>Name</label>
+    <input type="text" formControlName="name" />
+    
+    
+    <label>Phone</label>
+    <input type="text" formControlName="phone" />
+    
+    
+    <div formGroupName="address" class="address">
+    <label>Street</label>
+    <input type="text" formControlName="street" />
+    
+    
+    <label>City</label>
+    <input type="text" formControlName="city" />
+    
+    
+    <label>State</label>
+    <input type="text" formControlName="state" />
+    
+    
+    <label>Pincode</label>
+    <input type="text" formControlName="pincode" />
+    </div>
+    
+    
+    <label>Select Admin</label>
+    <select formControlName="admin">
+    <option value="">-- Select Admin --</option>
+    <option *ngFor="let admin of admins" [value]="admin._id">
+    {{ admin.name }} ({{ admin.email }})
+    </option>
+    </select>
+    
+    
+    <button type="submit" [disabled]="loading" (click) ="submit()">
+    {{ loading ? 'Saving...' : 'Save Changes' }}
+    </button>
+    
+    
+    </form>
+    </div>

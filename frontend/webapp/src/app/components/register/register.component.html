@@ -10,6 +10,9 @@
         placeholder="Enter your name"
         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
       />
+      <p *ngIf="isInvalid('name')" class="text-red-500 text-sm mt-1">
+        Name is required
+      </p>
     </div>
   
     <div>
@@ -20,6 +23,14 @@
         placeholder="Enter your email"
         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
       />
+      <p *ngIf="isInvalid('email')" class="text-red-500 text-sm mt-1">
+        <span *ngIf="registerForm.get('email')?.errors?.['required']">
+          Email is required
+        </span>
+        <span *ngIf="registerForm.get('email')?.errors?.['email']">
+          Enter a valid email
+        </span>
+      </p>
     </div>
   
     <div class="grid grid-cols-2 gap-3">
@@ -31,6 +42,14 @@
           placeholder="••••••••"
           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
         />
+        <p *ngIf="isInvalid('password')" class="text-red-500 text-sm mt-1">
+          <span *ngIf="registerForm.get('password')?.errors?.['required']">
+            Password is required
+          </span>
+          <span *ngIf="registerForm.get('password')?.errors?.['minlength']">
+            Password must be at least 5 characters
+          </span>
+        </p>
       </div>
   
       <div>
@@ -41,6 +60,11 @@
           placeholder="••••••••"
           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
         />
+        <p *ngIf="submitted && registerForm.errors?.['passwordMismatch']"
+   class="text-red-500 text-sm mt-1">
+  Passwords do not match
+</p>
+
       </div>
     </div>
   
@@ -54,6 +78,9 @@
         <option value="user">User</option>
         <option value="admin">Admin</option>
       </select>
+      <p *ngIf="isInvalid('role')" class="text-red-500 text-sm mt-1">
+        Role is required
+      </p>
     </div>
   
     <div *ngIf="registerForm.get('role')?.value === 'user'">
@@ -64,15 +91,19 @@
       >
         <option *ngFor="let admin of admins" [value]="admin._id">{{ admin.name }}</option>
       </select>
+      <p *ngIf="isInvalid('admin')" class="text-red-500 text-sm mt-1">
+        Please select an admin
+      </p>
     </div>
   
     <button
       type="submit"
-      class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg shadow-md transition-all duration-300"
+      [disabled] = "registerForm.invalid"
+      class="w-full bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg shadow-md transition-all duration-300"
     >
       Register
     </button>
-  
+    <pre class="text-xs">{{ registerForm.status }}</pre>
     <p class="text-center text-sm text-gray-600 mt-3">
       Already have an account?
       <a routerLink="/auth/login" class="text-blue-600 font-medium hover:underline cursor-pointer">Login here</a>

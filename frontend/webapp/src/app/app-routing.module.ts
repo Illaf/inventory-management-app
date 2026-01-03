@@ -17,14 +17,20 @@ import { ProductlistComponent } from './components/productlist/productlist.compo
 import { OrderComponent } from './components/order/order.component';
 import { LayoutComponent } from './admin/layout/layout.component';
 import { HeroComponent } from './hero/hero.component';
+import { ProfileComponent } from './profile/profile.component';
+import { UsersComponent } from './admin/users/users.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'welcome', pathMatch: 'full' },
+  // { path: '', redirectTo: 'welcome', pathMatch: 'full' },
   { path: 'welcome', component: HeroComponent },
   {
     path:"",
     component: HomeComponent,
     canActivate:[AuthGuard]
+  },
+  {
+    path:"profile",
+    component:ProfileComponent
   },
   {
     path: '',
@@ -46,7 +52,11 @@ const routes: Routes = [
         component: CategoriesComponent,
         canActivate:[AuthGuard]
       },
-     
+      {
+        path:"admin/users",
+        component: UsersComponent,
+        // canActivate:[AuthGuard]
+      },
      // { path: 'orders', component: ManageOrdersComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],

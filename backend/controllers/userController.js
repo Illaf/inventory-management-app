@@ -30,7 +30,7 @@ const loginUser = asyncHandler(async (req, res) => {
 const registerUser = async (req, res) => {
   try {
     const { name, email, password, admin, role} = req.body;
-  
+    
     const userExists = await User.findOne({ email });
   
     if (userExists) {
@@ -64,6 +64,103 @@ const registerUser = async (req, res) => {
       return res.status(500).json({message:"Error fertching users",error});
     }
   }
+
+const getUserById = async(req,res) => {
+  try {
+    const {id} = req.body
+    const user = await User.findById(id)
+    return res.status(200).json(user)
+  } catch (error) {
+    return res.status(500).json({message:"Error fertching user",error});
+  }
+}
+const selectAdmin = async(req,res) => {
+const {adminId} = req.body
+const admin = await User.findOne({ _id: adminId, role: 'admin' });
+if (!admin) {
+  return res.status(400).json({ message: 'Invalid admin selected' });
+}
+
+req.user.admin = adminId;
+req.user.adminChangedAt = new Date();
+await req.user.save();
+
+res.json({ message: 'Admin assigned successfully' });
+
+}
+const updateProfile = async (req, res) => {
+  try {
+    const userId = req.userId; // from auth middleware
+
+    const {
+      name,
+      phone,
+      address,
+      admin
+    } = req.body;
+
+    const updates = {};
+
+    // -------- BASIC DETAILS --------
+    if (name) updates.name = name;
+    if (phone) updates.phone = phone;
+    if (address) updates.address = address;
+
+    // -------- ADMIN CHANGE LOGIC --------
+    if (admin !== undefined) {
+      const user = await User.findById(userId);
+
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      // Admin users cannot assign another admin
+      if (user.role === 'admin') {
+        return res.status(403).json({
+          message: 'Admin users cannot change admin'
+        });
+      }
+
+      // If admin is being changed
+      if (admin && admin.toString() !== user.admin?.toString()) {
+
+        // Validate new admin
+        const adminExists = await User.findOne({
+          _id: admin,
+          role: 'admin'
+        });
+
+        if (!adminExists) {
+          return res.status(400).json({
+            message: 'Invalid admin selected'
+          });
+        }
+
+        updates.admin = admin;
+        updates.adminChangedAt = new Date();
+      }
+    }
+
+    // -------- UPDATE USER --------
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updates },
+      { new: true, runValidators: true }
+    ).select('-password');
+
+    return res.json({
+      message: 'Profile updated successfully',
+      user: updatedUser
+    });
+
+  } catch (error) {
+    console.error('Update Profile Error:', error);
+    return res.status(500).json({
+      message: 'Something went wrong'
+    });
+  }
+};
+
   const logoutUser = (req, res) => {
     res.cookie("token", "", {
       httpOnly: true,
@@ -71,4 +168,4 @@ const registerUser = async (req, res) => {
     });
     res.status(200).json({ message: "Logged out successfully" });
   };
-export {logoutUser,registerUser,loginUser,getAllUsers}  
+export {logoutUser,registerUser,loginUser,getAllUsers,getUserById,selectAdmin,updateProfile}  

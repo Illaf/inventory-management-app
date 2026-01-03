@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AdminService } from 'src/app/service/admin.service';
+import { AuthService } from 'src/app/service/auth.service';
+import { SocketService } from 'src/app/service/socket.service';
 import { Order } from 'src/app/types/order';
 
 @Component({
@@ -12,7 +14,7 @@ import { Order } from 'src/app/types/order';
 export class AdmindashboardComponent implements OnInit {
   adminService = inject(AdminService);
   filterForm!: FormGroup;
-
+  authService = inject(AuthService)
   orders: Order[] = [];
   filteredOrders: Order[] = [];
   selectedOrder: Order | null = null;
@@ -20,10 +22,10 @@ export class AdmindashboardComponent implements OnInit {
   errorMsg = '';
   stats = { totalUsers: 0, totalOrders: 0, pendingOrders: 0, totalRevenue: 0 };
   searchTerm = '';
-
+  adminId:string=""
   showSidebar: boolean = false;
-
-  constructor(private fb: FormBuilder, private http: HttpClient) {}
+  usersUnderAdminLength:number = 0
+  constructor(private fb: FormBuilder, private http: HttpClient,private socketService:SocketService) {}
 
   toggleSidebar() {
     this.showSidebar = !this.showSidebar;
@@ -35,7 +37,15 @@ export class AdmindashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadOrders();
-  }
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.adminId = user._id
+    this.socketService.register(this.adminId,"admin");
+
+    this.socketService.onNewOrder().subscribe(data => {
+      alert(`New order from ${data.user}, Total: ₹${data.total}`);
+    })
+    this.usersUnderAdmin()
+    }
 
   loadOrders() {
     this.http.get('http://localhost:8800/api/admin/orders').subscribe({
@@ -56,20 +66,30 @@ export class AdmindashboardComponent implements OnInit {
       },
     });
   }
-
+usersUnderAdmin(){
+  console.log("gets called usersUnderAdmin")
+  this.authService.getAllUsers().subscribe((users:any) => {
+    const usersUnderAdmin = users.filter(
+      (u: any) => u.role === 'user' && u.admin === this.adminId
+    );
+    console.log("users under admin",usersUnderAdmin.length)
+    this.stats.totalUsers = usersUnderAdmin.length;
+  })
+}
   computeStats() {
-    if (!this.orders?.length) {
-      this.stats = { totalUsers: 0, totalOrders: 0, pendingOrders: 0, totalRevenue: 0 };
-      return;
-    }
+    
+    // if (!this.orders?.length ) {
+    //   this.stats = { totalUsers: 0, totalOrders: 0, pendingOrders: 0, totalRevenue: 0 };
+    //   return;
+    // }
 
-    this.stats.totalOrders = this.orders.length;
-    this.stats.pendingOrders = this.orders.filter(o => o.status === 'pending').length;
-    this.stats.totalRevenue = this.orders.reduce((sum, o) => sum + (o.total || 0), 0);
-
+    this.stats.totalOrders = this.orders?.length;
+    this.stats.pendingOrders = this.orders?.filter(o => o.status === 'pending').length;
+    this.stats.totalRevenue = this.orders?.reduce((sum, o) => sum + (o.total || 0), 0);
+    console.log("gets called")
     // ✅ Count unique users
-    const uniqueUsers = new Set(this.orders.map(o => o.user?._id));
-    this.stats.totalUsers = uniqueUsers.size;
+    // const uniqueUsers = new Set(this.orders.map(o => o.user?._id));
+    // this.stats.totalUsers = uniqueUsers.size;
 
     console.log('Dashboard Stats:', this.stats);
   }
@@ -112,7 +132,8 @@ export class AdmindashboardComponent implements OnInit {
 
   updateOrderStatus(orderId: string, status: 'approved' | 'rejected') {
     this.adminService.updateOrderStatus(orderId, status).subscribe({
-      next: (updatedOrder) => {
+      next: (res:any) => {
+        const updatedOrder = res.order
         this.orders = this.orders.map(order =>
           order._id === updatedOrder._id ? updatedOrder : order
         );

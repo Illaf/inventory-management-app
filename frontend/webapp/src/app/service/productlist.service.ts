@@ -17,8 +17,7 @@ http= inject(HttpClient)
     pageSize?: number;
   }) {
     let params = new HttpParams();
-  
-    if (options.searchTerm) params = params.set('searchTerm', options.searchTerm);
+  if (options.searchTerm) params = params.set('searchTerm', options.searchTerm);
     if (options.categoryId) params = params.set('categoryId', options.categoryId);
     if (options.sortBy) params = params.set('sortBy', options.sortBy);
     if (options.sortOrder !== undefined) params = params.set('sortOrder', options.sortOrder);

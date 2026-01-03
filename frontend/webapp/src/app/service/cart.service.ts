@@ -20,11 +20,12 @@ export class CartService {
     this.http.get<any>(this.cartUrl).subscribe({
       next: (res) => {
         console.log("Fetched cart:", res);
-        this._items.next(res.items || []); // 🔥 Triggers UI update
+        this._items.next(res.items || []); 
+        return res.items
       },
       error: (err) => {
         console.error('Failed to load cart:', err);
-        this._items.next([]); // reset cart if failed
+        this._items.next([]); 
       },
     });
   }

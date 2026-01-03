@@ -1,0 +1,33 @@
+.profile-container {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    
+    label {
+    display: block;
+    margin-top: 12px;
+    font-weight: 600;
+    }
+    
+    
+    input, select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    }
+    
+    
+    .address {
+    margin-top: 10px;
+    }
+    
+    
+    button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+    }

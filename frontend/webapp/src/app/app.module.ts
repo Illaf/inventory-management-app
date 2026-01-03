@@ -27,6 +27,8 @@ import { AdminOrdersComponent } from './components/admin-orders/admin-orders.com
 import { LayoutComponent } from './admin/layout/layout.component';
 import { SidebarComponent } from './admin/sidebar/sidebar.component';
 import { HeroComponent } from './hero/hero.component';
+import { ProfileComponent } from './profile/profile.component';
+import { UsersComponent } from './admin/users/users.component';
 
 @NgModule({
   providers: [
@@ -43,7 +45,6 @@ import { HeroComponent } from './hero/hero.component';
          HeaderComponent,
          FooterComponent,
          SearchFilterComponent,
-         
          AdmindashboardComponent,
          ProductlistComponent,
          CartComponent,
@@ -52,6 +53,7 @@ import { HeroComponent } from './hero/hero.component';
          LayoutComponent,
          SidebarComponent,
          HeroComponent,
+         ProfileComponent,
          
          
         

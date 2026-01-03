@@ -1,10 +1,37 @@
-<app-header *ngIf="isLoggedIn"></app-header>
+<!-- <app-header *ngIf="isLoggedIn"></app-header> -->
 
 <!-- Show Hero only when logged out -->
-<app-hero *ngIf="router.url === '/'"></app-hero>
+<!-- <app-hero *ngIf="router.url === '/welcome'"></app-hero> -->
 
-<main class="min-h-screen">
+<!-- <main class="min-h-screen">
   <router-outlet></router-outlet>
-</main>
+</main> -->
 
-<app-footer *ngIf="isLoggedIn"></app-footer>
+<!-- <app-footer *ngIf="isLoggedIn"></app-footer> -->
+
+<div class="min-h-screen bg-gray-100 flex justify-center">
+  
+  <!-- App Shell -->
+  <div
+    class="w-full
+           max-w-[1440px]
+           bg-white
+           rounded-2xl
+           shadow-sm
+           overflow-hidden
+           my-4"
+  >
+    <app-header *ngIf="isLoggedIn"></app-header>
+
+    <!-- Show Hero only when logged out -->
+    <app-hero *ngIf="router.url === '/welcome'"></app-hero>
+
+    <main class="min-h-screen">
+      <router-outlet></router-outlet>
+    </main>
+
+    <app-footer *ngIf="isLoggedIn"></app-footer>
+  </div>
+
+</div>
+

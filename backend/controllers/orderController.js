@@ -1,6 +1,7 @@
 import Order from '../models/order.js';
 import Cart from '../models/cart.js';
-
+import {io,onlineUsers} from "../server.js"
+import sendMail from '../service/mailService.js';
 export const placeOrder = async (req, res) => {
   const userId = req.user._id;
   const cart = await Cart.findOne({ user: userId }).populate('items.product');
@@ -25,15 +26,40 @@ export const placeOrder = async (req, res) => {
   });
 
   await order.save();
+  sendNotification(order)
   await Cart.findOneAndDelete({ user: userId }); // clear cart
 
   res.status(201).json({ message: 'Order placed successfully', order });
 };
 // API: GET /api/orders/user
 export const getMyOrders = async (req, res) => {
-  const orders = await Order.find({ user: req.user._id }).sort({ placedAt: -1 });
-  res.json(orders);
+  try {
+    const orders = await Order.find({ user: req.user._id })
+      .sort({ placedAt: -1 });
+    console.log("orders", orders)
+    return res.status(200).json(orders);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Failed to fetch orders' });
+  }
 };
+
+export const sendNotification = (order)=> {
+  try {
+    for(let [userId,data] of onlineUsers.entries()){
+      if(data.role === "admin"){
+        io.to(data.socketId).emit("new-order",{
+          orderId: order._id,
+          total:order.total,
+          user:req.user.name
+        })
+      }
+    }
+  } catch (error) {
+    console.log("error in sendNotification:",error)
+  }
+
+}
 
 // Optional: notify and mark as read
 export const markOrderNotified = async (req, res) => {

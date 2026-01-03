@@ -29,6 +29,7 @@ const orderSchema = new Schema({
   ],
   total: Number,
   status:String,
+  approved:Boolean,
   notified: { type: Boolean, default: false },
   placedAt: { type: Date, default: Date.now }
 });

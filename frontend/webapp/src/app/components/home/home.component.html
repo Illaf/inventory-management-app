@@ -13,7 +13,7 @@
                 Find and order everything you need – fast, easy, and reliable.
               </p>
               <a
-                routerLink="/products"
+                routerLink="/productlist"
                 class="inline-block bg-blue-600 text-white px-6 py-3 rounded-xl shadow hover:bg-blue-700 transition"
               >
                 Browse Inventory
@@ -30,22 +30,40 @@
             </div>
           </section>
      </div>
-    <section class="py-10 px-4 bg-gray-50">
-      <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Browse Categories</h2>
+     <section class="py-12 bg-gray-50">
+      <div class="max-w-6xl mx-auto px-4">
     
-      <div  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
-        <div *ngFor="let category of categories" (click)="searchCategory(category._id!)" class="bg-white rounded-xl shadow hover:shadow-lg cursor-pointer transition p-3 text-center">
-
-    <h3 class="text-lg font-semibold text-gray-700" [queryParams]="{categoryId:category._id}" [routerLink]="['/productlist']">
-            
-            {{ category.name }}</h3>
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-8 text-center">
+          Browse Categories
+        </h2>
+    
+        <div class="flex flex-wrap justify-center gap-6">
+          <div
+            *ngFor="let category of categories"
+            (click)="selectCategory(category._id)"
+            class="w-[160px] h-[80px]
+                   flex items-center justify-center
+                   bg-white rounded-2xl border border-gray-100
+                   shadow-sm hover:shadow-md
+                   cursor-pointer transition-all duration-200
+                   hover:-translate-y-1"
+          >
+            <h3 class="text-base font-semibold text-gray-700 text-center">
+              {{ category.name }}
+            </h3>
+          </div>
         </div>
+    
       </div>
     </section>
     
+    
+    
     <div>
         <section>
-            <app-product-grid></app-product-grid>
+            <app-product-grid [categoryId]="selectedCategoryId"></app-product-grid>
         </section>
     </div>
 </div>
+<!-- [routerLink]="['/productlist']"
+    [queryParams]="{ categoryId: category._id }" -->

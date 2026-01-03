@@ -20,6 +20,9 @@ adminService = inject(AdminService);
 router=inject(Router);
 errorMessage: String | undefined;
 admins:any =[];
+submitted = false;
+
+
   constructor() { }
 
   ngOnInit(): void {
@@ -28,44 +31,66 @@ console.log("data",data);
 this.admins= data;
     })
     this.registerForm = this.formBuilder.group({
-      name:['',[Validators.required]],
-      email:['',[Validators.required,Validators.email]],
-      password:['',[Validators.minLength(5)]],
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(5)]],
       confirmPassword: ['', Validators.required],
       role: ['', Validators.required],
-      admin:['']
-    })
-  }
-  isRoleAdmin():boolean{
-    return this.registerForm.get('role')?.value === 'User'
-  }
-onSubmit(){
-  if(this.registerForm.invalid) return;
-
-  const formData: any= this.registerForm.value;
-  const payload= {
-    ...formData
+      admin: [null]
+    },
+    
+  { validators: this.passwordMatchValidator });
     
   }
-  console.log(payload);
-
-   
-    this.authService.registerUser(payload).subscribe({
-      next: (result: any) => {
-        alert("User Registered");
-        this.router.navigateByUrl("/auth/login");
-        localStorage.setItem('token', result.token);
-        localStorage.setItem('user', JSON.stringify(result.user));
-      },
-      error: (err: any) => {
-        if (err.error?.message) {
-          this.errorMessage = err.error.message;
-          console.log(this.errorMessage)
-        } else {
-          this.errorMessage = 'Error Registering the user';
-        }
-      }
-    })
+  isInvalid(controlName: string): boolean {
+    const control = this.registerForm.get(controlName);
+    return !!(
+      control &&
+      control.invalid &&
+      (control.touched || this.submitted)
+    );
+  }
+  passwordMatchValidator(form: FormGroup) {
+    const password = form.get('password')?.value;
+    const confirm = form.get('confirmPassword')?.value;
+    return password === confirm ? null : { passwordMismatch: true };
+  }
   
-}
+  isRoleAdmin():boolean{
+    return this.registerForm.get('role')?.value === 'user'
+  }
+  onSubmit() {
+    this.submitted=true
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      return;
+    }
+  
+    const formData = this.registerForm.value;
+  
+    const payload: any = {
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      role: formData.role
+    };
+  
+    // only attach admin if role === user
+    if (formData.role === 'user' && formData.admin) {
+      payload.admin = formData.admin;
+    }
+  
+    console.log('Payload:', payload);
+  
+    this.authService.registerUser(payload).subscribe({
+      next: () => {
+        alert('User Registered');
+        this.router.navigateByUrl('/auth/login');
+      },
+      error: (err) => {
+        this.errorMessage = err.error?.message || 'Registration failed';
+      }
+    });
+  }
+  
 }

@@ -1,6 +1,6 @@
 import User from "../models/user.js"
 import Order from "../models/order.js"
-
+import { io,onlineUsers } from "../server.js";
 export const getUserOrdersUnderAdmin = async (req, res) => {
     const adminId = req.user._id;
   
@@ -34,7 +34,13 @@ export const getUserOrdersUnderAdmin = async (req, res) => {
   
       order.status = status;
       await order.save();
-  
+      const userSocket = onlineUsers.get(order.user._id)
+      if(userSocket){
+        io.to(userSocket.socketId).emit("order-status-updated",{
+          orderId: order._id,
+          status: order.status
+        })
+      }
       res.status(200).json({ success: true, message: `Order ${status}`, order });
     } catch (error) {
       res.status(500).json({ success: false, message: 'Server error', error });

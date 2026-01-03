@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
 import { FormsModule } from '@angular/forms';
 import { NgModel } from '@angular/forms';
+import { json } from 'stream/consumers';
+import { RouterModule } from '@angular/router';
+import { CartService } from 'src/app/service/cart.service';
 
 @Component({
   selector: 'app-header',
@@ -12,10 +15,14 @@ import { NgModel } from '@angular/forms';
 
 export class HeaderComponent implements OnInit {
   authService= inject(AuthService);
+  cartService = inject(CartService)
   searchQuery: string = '';
   router= inject(Router)
   isAdmin:boolean=false;
   searchTerm:string='';
+  userId:string =""
+  showCartCount:boolean = false;
+  cartCount = 0;
   constructor() { }
 
   ngOnInit(): void {
@@ -24,7 +31,18 @@ export class HeaderComponent implements OnInit {
       const user = JSON.parse(userStr);
       this.isAdmin = user?.isAdmin || false;
     }
+    this.userId = JSON.parse(localStorage.getItem('user')  || '{}')
+    this.cartService.fetchCart();
+    if(this.cartService.items)
+    this.showCartCount=true;
+  this.cartService.items$.subscribe(items => {
+    this.cartCount = items.reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
+  });
   }
+  
 onSearch(){
 if(this.searchTerm){
   this.router.navigateByUrl("/productlist?searchTerm="+this.searchTerm)

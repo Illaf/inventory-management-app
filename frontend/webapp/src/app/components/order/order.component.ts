@@ -3,7 +3,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { CartService } from 'src/app/service/cart.service';
 import { OrderService } from 'src/app/service/order.service';
-
+import { Router } from '@angular/router';
+import { error } from 'console';
 @Component({
   selector: 'app-order',
   templateUrl: './order.component.html',
@@ -14,8 +15,11 @@ export class OrderComponent implements OnInit {
   items$ = this._items.asObservable();
   cartItems:any = [];
   total = 0;
+  router= inject(Router)
   orders:any[]=[]
   http= inject(HttpClient)
+  showOrders = false;
+
   constructor(
     private cartService: CartService,
     private orderService: OrderService
@@ -53,6 +57,7 @@ loadCartItems(){
     this.orderService.placeOrder().subscribe({
       next: (res) => {
         alert('Order placed successfully!');
+        this.showOrders =true
         this.cartService.fetchCart(); // empty cart
       },
       error: () => alert('Failed to place order')
@@ -66,5 +71,21 @@ loadCartItems(){
   clearCart(){
     console.log("clear cart")
     this.cartService.clearCart();
+  }
+  goToMyOrders(){
+    this.showOrders = true;
+    this.orderService.getMyOrders().subscribe({
+      next: (res) => {
+        this.orders = res,
+        console.log(this.orders)
+      },
+      error: (e) =>{
+        alert('Failed to load orders')
+        console.log(e)
+      } 
+    });
+  }
+  backToCart() {
+    this.showOrders = false;
   }
 }

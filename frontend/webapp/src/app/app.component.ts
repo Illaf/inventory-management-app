@@ -11,8 +11,9 @@ import { AuthService } from './service/auth.service';
 export class AppComponent {
   isLoggedIn=false;
   authService= inject(AuthService)
-  title = 'webapp';
+  title = 'InventoryM';
   constructor(public router: Router){
     this.isLoggedIn= this.authService.isLoggedIn()
+    console.log("is logged in:",this.isLoggedIn)
   }
 }
