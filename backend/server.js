@@ -25,13 +25,6 @@ app.use(cors({
   credentials: true
 }));
 
-// 🧩 MIDDLEWARE
-app.use(
-  cors({
-    origin: ["http://localhost:4200"],
-    credentials: true
-  })
-);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
