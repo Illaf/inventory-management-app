@@ -13,16 +13,16 @@ export class AdminService {
   constructor() { }
 
 getAdmins(){
-return this.http.get('http://localhost:8800/api/admins');
+return this.http.get('https://inventory-management-app-37df.onrender.com/api/admins');
 }
 approveOrder(id:string){
-return this.http.post(`http://localhost:8800/api/admin/approve/`+id,id)
+return this.http.post(`https://inventory-management-app-37df.onrender.com/api/admin/approve/`+id,id)
 }
 getUserOrdersUnderAdmin():Observable<Order[]>{
-return this.http.get<Order[]>('http://localhost:8800/api/admin/orders')
+return this.http.get<Order[]>('https://inventory-management-app-37df.onrender.com/api/admin/orders')
 }
 updateOrderStatus(orderId: string, status: 'approved' | 'rejected') {
-  return this.http.put<Order>(`http://localhost:8800/api/admin/status/`+orderId, { status });
+  return this.http.put<Order>(`https://inventory-management-app-37df.onrender.com/api/admin/status/`+orderId, { status });
 }
 
 }

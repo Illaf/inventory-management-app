@@ -8,18 +8,18 @@ http= inject(HttpClient);
   constructor() { }
 
   getCategories(){
-    return this.http.get('http://localhost:8800/api/category/get')
+    return this.http.get('https://inventory-management-app-37df.onrender.com/api/category/get')
   }
   getCategoryById(id:string){
-    return this.http.get('http://localhost:8800/api/category/'+id)
+    return this.http.get('https://inventory-management-app-37df.onrender.com/api/category/'+id)
   }
   addCategory(category:Object){
-    return this.http.post("http://localhost:8800/api/category/add", category)
+    return this.http.post("https://inventory-management-app-37df.onrender.com/api/category/add", category)
   }
   editCategory(id:string,category:Object){
-return this.http.put("http://localhost:8800/api/category/"+id, category)
+return this.http.put("https://inventory-management-app-37df.onrender.com/api/category/"+id, category)
   }
   deleteCategory(id:string){
-return this.http.delete("http://localhost:8800/api/category/"+id);
+return this.http.delete("https://inventory-management-app-37df.onrender.com/api/category/"+id);
   }
 }

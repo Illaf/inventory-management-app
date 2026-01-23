@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class OrderService {
 
-  private baseUrl = 'http://localhost:8800/api/order';
+  private baseUrl = 'https://inventory-management-app-37df.onrender.com/api/order';
   orders: any[] = [];
   constructor(private http: HttpClient) {}
 
@@ -14,6 +14,6 @@ export class OrderService {
     return this.http.post(`${this.baseUrl}/place`, {});
   }
   getMyOrders(){
-    return this.http.get<any[]>(`http://localhost:8800/api/order/user`);
+    return this.http.get<any[]>(`https://inventory-management-app-37df.onrender.com/api/order/user`);
   }
 }

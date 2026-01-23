@@ -12,7 +12,7 @@ export class CartService {
   
   private _items = new BehaviorSubject<CartItem[]>([]);
   public items$ = this._items.asObservable();
-  private cartUrl = 'http://localhost:8800/api/cart';
+  private cartUrl = 'https://inventory-management-app-37df.onrender.com/api/cart';
   constructor() {}
 
   // Fetch cart from backend

@@ -16,7 +16,7 @@ export class SocketService {
 
   
   connect() {
-    this.socket = io('http://localhost:8800');
+    this.socket = io('https://inventory-management-app-37df.onrender.com');
   
     this.socket.on('connect', () => {
       console.log('Socket connected:', this.socket.id);

@@ -11,17 +11,17 @@ router=inject(Router);
   constructor() { }
   registerUser(user:Object){
     console.log("hello i am pressed")
-    return this.http.post('http://localhost:8800/api/auth/signup',user,{
+    return this.http.post('https://inventory-management-app-37df.onrender.com/api/auth/signup',user,{
       headers: { 'x-skip-interceptor': 'true' }
     })
   }
   loginUser(user:Object){
-    return this.http.post('http://localhost:8800/api/auth/login',user,{
+    return this.http.post('https://inventory-management-app-37df.onrender.com/api/auth/login',user,{
       headers:{'x-skip-interceptor':'true'}
     })
   }
   getAllUsers(){
-    return this.http.get('http://localhost:8800/api/auth/users',{
+    return this.http.get('https://inventory-management-app-37df.onrender.com/api/auth/users',{
       headers:{'x-skip-interceptor':'true'}
     });
 }
@@ -34,7 +34,7 @@ router=inject(Router);
   }
   getUser(id:string){
     // console.log("id:",id)
-    return this.http.post('http://localhost:8800/api/auth/user',{id},{
+    return this.http.post('https://inventory-management-app-37df.onrender.com/api/auth/user',{id},{
       headers:{'x-skip-interceptor':'true'}
     })
   }
@@ -50,6 +50,6 @@ router=inject(Router);
     this.router.navigateByUrl("/auth/register")
   }
   updateProfile(data:any){
-    return this.http.put(`http://localhost:8800/api/auth/profile`, data);
+    return this.http.put(`https://inventory-management-app-37df.onrender.com/api/auth/profile`, data);
   }
 }

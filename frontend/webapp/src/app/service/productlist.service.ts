@@ -24,6 +24,6 @@ http= inject(HttpClient)
     if (options.page !== undefined) params = params.set('page', options.page);
     if (options.pageSize !== undefined) params = params.set('pageSize', options.pageSize);
   
-    return this.http.get<Product[]>('http://localhost:8800/api/product/productlist', { params });
+    return this.http.get<Product[]>('https://inventory-management-app-37df.onrender.com/api/product/productlist', { params });
   }
 }
