@@ -14,6 +14,16 @@ const app = express();
 const server = http.createServer(app);
 
 initSocket(server);
+const allowedOrigins = [
+  "https://inventory-management-app-olive.vercel.app",
+  "https://inventory-management-app.vercel.app", // if you have another prod domain
+  "http://localhost:4200" // for local dev (Angular)
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
 
 // 🧩 MIDDLEWARE
 app.use(
