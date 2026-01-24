@@ -37,13 +37,16 @@ authService= inject(AuthService);
     this.authService.loginUser(formData).subscribe({
       next: (result: any) => {
         alert("User logged in");
-        // console.log(result);
         localStorage.setItem('token', result.token);
         localStorage.setItem('user', JSON.stringify(result.user));
-        if(result.user.admin == null){
-          this.router.navigateByUrl("/dashboard");
+        
+        const isAdmin = result.user.admin === true || result.user.role === 'admin';
+        
+        if (isAdmin) {
+          this.router.navigateByUrl('/admin/dashboard'); // Fixed path
+        } else {
+          this.router.navigateByUrl('/home'); // Changed from '/' to '/home'
         }
-        else this.router.navigateByUrl("/");
       },
       error: (err: any) => {
         if (err.error?.message) {

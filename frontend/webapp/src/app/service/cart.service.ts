@@ -49,7 +49,7 @@ export class CartService {
 
   // Clear entire cart
   clearCart(): Observable<any> {
-    return this.http.delete(`${this.cartUrl}/clear`);
+     return this.http.delete(`${this.cartUrl}/clear`);
   }
 
   // Expose current items

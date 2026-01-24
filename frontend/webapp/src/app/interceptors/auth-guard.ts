@@ -6,28 +6,35 @@ export const AuthGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const authService = inject(AuthService);
 
-  const isLoggedIn = authService.isLoggedIn();
+  const token = localStorage.getItem('token');
   const userStr = localStorage.getItem('user');
   const user = userStr ? JSON.parse(userStr) : null;
 
-  // Route data may specify who can access
-  const requiredRole = route.data?.['role']; // e.g. { role: 'admin' }
+  // If on auth pages
+  if (state.url.startsWith('/auth')) {
+    // If already logged in, redirect to appropriate page
+    if (token && user) {
+      const isAdmin = user.admin === true || user.role === 'admin';
+      router.navigateByUrl(isAdmin ? '/admin/dashboard' : '/home');
+      return false;
+    }
+    return true;
+  }
 
-  // Allow access to auth routes
-  if (state.url.startsWith('auth')) return true;
-
-  // Not logged in -> send to login
-  if (!isLoggedIn) {
+  // Not logged in - redirect to login
+  if (!token || !user) {
     router.navigateByUrl('/auth/login');
     return false;
   }
 
-  // If route requires admin and user is not admin -> block
-  if (requiredRole === 'admin' && !user?.admin) {
-    router.navigateByUrl('/not-authorized'); // or redirect to dashboard
+  // Check for admin role requirement
+  const requiredRole = route.data?.['role'];
+  const isAdmin = user.admin === true || user.role === 'admin';
+
+  if (requiredRole === 'admin' && !isAdmin) {
+    router.navigateByUrl('/home');
     return false;
   }
 
-  // Otherwise allow
   return true;
 };

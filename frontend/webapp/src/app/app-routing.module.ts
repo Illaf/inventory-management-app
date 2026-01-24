@@ -68,6 +68,7 @@ const routes: Routes = [
     path: 'admin',
     component: LayoutComponent,
     canActivate: [AuthGuard],
+    data: { role: 'admin' }, // Added role requirement
     children: [
       { path: 'dashboard', component: AdmindashboardComponent },
       { path: 'products', component: ProductsComponent },
