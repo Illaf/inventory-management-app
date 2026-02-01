@@ -17,11 +17,21 @@ users:any[]=[]
 displayedColumns: string[] = [ 'name', 'phone','address','isActive'];
   dataSource = new MatTableDataSource<Object>([] as any);
   constructor(private authService:AuthService) { }
-
+admin:string|null =""
   ngOnInit(): void {
+    const userStr = localStorage.getItem("user");
+
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      this.admin = user._id; 
+      console.log("this.admin =", user.name)
+    }
+  
+    console.log("this.admin",this.admin)
 this.authService.getAllUsers().subscribe((result:any) => {
-  console.log(result)
-  this.dataSource.data=result
+  //console.log(result)
+  this.dataSource.data=result.filter((user: { admin: string | null; }) => user.admin === this.admin)
+  console.log(this.dataSource.data)
 })
   }
   @ViewChild(MatPaginator) paginator!: MatPaginator;
